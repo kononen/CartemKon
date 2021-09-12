@@ -216,7 +216,6 @@ int Matrix::lowerBound()
 	return chHorzMin + chVertMin;
 }
 
-
 void Matrix::deleteRow(const int& rowNum)
 {
 	try
