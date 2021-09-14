@@ -5,39 +5,42 @@
 class Matrix
 {
 	public:
-		std::vector<std::vector<int>> matrix;
-		std::vector<int> horzHeading;
-		std::vector<int> vertHeading;
+		std::vector<std::vector<int>> matrix; // основная матрица
+		//std::vector<std::vector<int>> baseDataMatrix; // матрица с исходными данными, которая не меняется. Нужна для сравнимания нулей с равной суммой констант приведения
+		std::vector<int> horzHeading; // вектор с сохранёнными с начала индексами строк, которые хранят в себе порядок этих строк
+		std::vector<int> vertHeading; // --\\-- индексами столбцов --\\--
+		int allbound = 0;// длина всего пути
 
-		//std::vector<int> horzMin;
-		//std::vector<int> vertMin;
+		Matrix();// конструктор по умолчанию
 
-		Matrix();
+		Matrix( int min, int max, int dim ); // конструктор инициализации
 
-		Matrix( int min, int max, int dim );
+		Matrix(const Matrix& otherM);// конструктор копирования
 
-		void printM();
+		//void equalityFirstData(); // в baseDataMatrix присваиваем значение matrix з
 
-		int minInRow(const int& rowNum);
-		int minInCol(const int& colNum);
+		void printM(); // выводим матрицу
+
+		int minInRow(const int& rowNum);// находим минимум по строке
+		int minInCol(const int& colNum);// находим минимум по столбцу
 		
-		void fsummaVertMin(); // типа void, так как у нас сумма минимумов по строкам храниться в отдельном поле класса (в силу того, что перед использованием функции lawBound матрица изменяется)
-		void fsummaHorzMin();
-		int lowerBound(); // подумаю, посмотрю, может понадобится, чтобы lawBound был типа void / чтобы было необходимо создать поле класса All 
+		int fsummaVertMin(); // возвращает сумму вертикальных минимумов
+		int fsummaHorzMin(); // возвращает сумму горизонтальных минимумов 
+		int lowerBound(); // сумма минимумов по строкам и по столбцам
 
-		void rowReduction(const int& rowNum, const int& reductionNumber);
-		void colReduction(const int& colNum, const int& reductionNumber);
+		void rowReduction(const int& rowNum, const int& reductionNumber); // вычитаем из всех элементов строки число rowNum 
+		void colReduction(const int& colNum, const int& reductionNumber); // вычитаем из всех элементов столбца число colNum
 
-		void globalRowReduction();
-		void globalColReduction();
+		void globalRowReduction(); // вычитаем из всех строк минимумы по тем строкам 
+		void globalColReduction(); // вычитаем из всех столбцов минимумы по тем столбцам
 
-		void deleteRow(const int& rowNum);
-		void deleteCol(const int& colNum);
+		void deleteRow(const int& rowNum); // удаляем строку
+		void deleteCol(const int& colNum); // удаляем столбец
 
 	private:
 
-		int chVertMin = 0;
-		int chHorzMin = 0;
-		void catchBlock_(int& errorCode);
+		int chVertMin = 0; // сумма минимумов по строкам
+		int chHorzMin = 0; // сумма минимумов по столбцам
+		void catchBlock_(int& errorCode); // ловит исключения
 };
 

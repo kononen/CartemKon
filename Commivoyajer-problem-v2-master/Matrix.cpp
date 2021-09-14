@@ -33,21 +33,68 @@ Matrix::Matrix(int min, int max, int dim)
 		matrix.push_back(matrixRow);
 		matrixRow.clear();
 	}
+	
 }
+
+Matrix::Matrix(const Matrix& otherM)
+{
+	std::vector<int> matrixRow;
+	for (int i = 0; i < otherM.matrix.size(); i++)
+	{
+		this->horzHeading.push_back(otherM.horzHeading[i]);
+		this->vertHeading.push_back(otherM.vertHeading[i]);
+
+		for (int j = 0; j < otherM.matrix.size(); j++)
+		{
+			matrixRow.push_back(otherM.matrix[i][j]);
+		}
+		matrix.push_back(matrixRow);
+		matrixRow.clear();
+	}
+} 
+
+//void Matrix::equalityFirstData()
+//{
+//	std::vector<int> matrixRow;
+//	for (int i = 0; i < this->matrix.size(); i++)
+//	{
+//		this->horzHeading.push_back(i);
+//		this->vertHeading.push_back(i);
+//
+//		for (int j = 0; j < this->matrix.size(); j++)
+//		{
+//			matrixRow.push_back(this->matrix[i][j]);
+//		}
+//		this->baseDataMatrix.push_back(matrixRow);
+//		matrixRow.clear();
+//	}
+//}
 
 void Matrix::printM()
 {
+	std::cout << std::endl;
+	std::cout.setf(std::ios::left);
 	for (int k = 0; k < matrix.size(); k++)
 	{
-		std::cout << "\t" << k;
+		std::cout << "==========";
 	}
-
 	std::cout << std::endl;
+	for (int k = 0; k < matrix.size(); k++)
+	{
+		std::cout << "\t   " << horzHeading[k];
+	}
+	std::cout << std::endl;
+	for (int k = 0; k < matrix.size(); k++)
+	{
+		std::cout << "==========";
+	}
 	std::cout << std::endl;
 
 	for (int i = 0; i < horzHeading.size(); i++)
 	{
-		std::cout << i;
+		std::cout << vertHeading[i];
+		std::cout.setf(std::ios::right);
+		std::cout << " ||";
 		for (int j = 0; j < vertHeading.size(); j++)
 		{
 			std::cout.setf(std::ios::right);
@@ -56,6 +103,7 @@ void Matrix::printM()
 		}
 		std::cout << std::endl;
 	}
+	std::cout.setf(std::ios::left);
 }
 
 int Matrix::minInRow(const int& rowNum)
@@ -67,32 +115,29 @@ int Matrix::minInRow(const int& rowNum)
 			throw(100);
 		}
 		bool positiveFound = false;
-		int i = 0;
 		int j = 0;
-		int min = -1;// = INT_MAX;// не понимаю логики, зачем минимум = -1 ? 
-		while (!positiveFound)
-		{
-			while (!positiveFound)
-			{	
-				if (matrix[i][j] >= 0)
-				{
-					positiveFound = true;
-					min = matrix[i][j];
-				}
-				j++;
+		int min = -1;// заменяем на -1, как на самый минимально возможный элемент
+		// находим первое положительное число
+		while (!positiveFound && (j < matrix.size())) // добавил условие: && (j < matrix.size()), так как в случае, если все элементы строки отрицательные, то можем бесконечно увеличивать j
+		{	
+			if (matrix[rowNum][j] >= 0)
+			{
+				positiveFound = true;
+				min = matrix[rowNum][j];
+				break;
 			}
-			i++;
+				j++;
 		}
 
 		for (auto& number : matrix[rowNum])
 		{
-			//if ( number < min && number != -1)
 			if (number < min && number >= 0)
 			{
 				min = number;
 			}
 		}
 
+		if (min == -1) { min = 0; };// в случае, если все ячейки строки rowNum матрицы отрицательные
 		return min;
 	}
 	catch(int errorCode)
@@ -109,15 +154,30 @@ int Matrix::minInCol(const int& colNum)
 		{
 			throw(100);
 		}
+		int positivei = 0;
+		bool positiveFound = false;
+		int min = -1;
+		// находим первое положительное число
+		while (!positiveFound && (positivei < matrix.size())) // добавил условие: && (i < matrix.size()) так как в случае, если все элементы столбца = -1, то то можем бесконечно увеличивать i
+		{
+			if (matrix[positivei][colNum] >= 0)
+			{
+				positiveFound = true;
+				min = matrix[positivei][colNum];
+				break;
+			}
+			positivei++;
+		}
 
-		int min = INT_MAX;// не понимаю логики, зачем минимум = -1 ? 
 		for (int i = 0; i < matrix.size(); i++)
 		{
-			if (matrix[i][colNum] < min && matrix[i][colNum] != -1)
+			if (matrix[i][colNum] < min && matrix[i][colNum] >= 0)
 			{
 				min = matrix[i][colNum];
 			}
 		}
+
+		if (min == -1) { min = 0; };// в случае, если все ячейки столбца матрицы отрицательные
 
 		return min;
 	}
@@ -127,22 +187,24 @@ int Matrix::minInCol(const int& colNum)
 	}
 }
 
-void Matrix::fsummaVertMin() // вызывается перед globalRowReduction
+int Matrix::fsummaVertMin() // вызывается перед globalRowReduction
 {
 	this->chVertMin = 0; // инициализируем нулём для того, чтобы сбрасывать значения после ветвления
 	for (int i = 0; i < matrix.size(); i++)
 	{
 		this->chVertMin += minInRow(i);
 	}
+	return chVertMin;
 }
 
-void Matrix::fsummaHorzMin() // вызывается перед globalColReduction
+int Matrix::fsummaHorzMin() // вызывается перед globalColReduction
 {
 	this->chHorzMin = 0;
 	for (int i = 0; i < matrix.size(); i++)
 	{
 		this->chHorzMin += minInCol(i);
 	}
+	return chHorzMin;
 }
 
 void Matrix::rowReduction(const int& rowNum, const int& reductionNumber)
@@ -197,7 +259,6 @@ void Matrix::globalRowReduction()
 {
 	for (int i = 0; i < matrix.size(); i++)
 	{
-		//horzMin.push_back(this->minInRow(i)); // похоже на костыль, хотелось бы от него избавиться в будущем. Нужен для запоминания столбца минимумов.
 		this->rowReduction(i, this->minInRow(i));
 	}
 }
@@ -206,14 +267,13 @@ void Matrix::globalColReduction()
 {
 	for (int i = 0; i < matrix.size(); i++)
 	{
-		//vertMin.push_back(this->minInCol(i)); // похоже на костыль, хотелось бы от него избавиться в будущем. Нужен для запоминания строки минимумов.
 		this->colReduction(i, this->minInCol(i));
 	}
 }
 
 int Matrix::lowerBound()
 {
-	return chHorzMin + chVertMin;
+	return (chHorzMin + chVertMin);
 }
 
 void Matrix::deleteRow(const int& rowNum)
@@ -224,9 +284,9 @@ void Matrix::deleteRow(const int& rowNum)
 		{
 			throw(100);
 		}
-
 		matrix[rowNum].clear();
-		vertHeading.erase(vertHeading.begin() + rowNum);
+		matrix.erase(matrix.begin() + rowNum);
+		vertHeading.erase(vertHeading.begin() + rowNum);// удаляем индекс строки
 	}
 	catch (int errorCode)
 	{
@@ -248,7 +308,7 @@ void Matrix::deleteCol(const int& colNum)
 			matrix[i].erase(matrix[i].begin() + colNum);
 		}
 
-		horzHeading.erase(horzHeading.begin() + colNum);
+		horzHeading.erase(horzHeading.begin() + colNum);// удаляем индекс колонки 
 	}
 	catch (int errorCode)
 	{

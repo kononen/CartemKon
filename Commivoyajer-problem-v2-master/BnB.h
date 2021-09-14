@@ -1,97 +1,150 @@
 #pragma once
 
+#include <iostream>
 #include "Matrix.h"
-#include "iostream"
+
 
 namespace BnB
 {
-	int maxi = 0;
-	int maxj = 0;
-	void step1(Matrix originalMatrix, int transmitbound)// передаём копию матрицы?
-	{
-		//bound = matrix1.lowerBound();
+	
 		int maxi = 0;
 		int maxj = 0;
-		int bound = transmitbound;// = zerosPower(originalMatrix) + 
-		int addbound1 = zerosPower(originalMatrix);
-		if (transmitbound + addbound1/*BnB::leftway(originalMatrix)*/ < BnB::rightway(originalMatrix))
+		std::vector<int> way;
+	
+		int zerosPower(Matrix inpMatrix)
 		{
-			originalMatrix.matrix[maxi][maxj] = -1;
-			//
-			//bound += /*BnB::leftway(originalMatrix)*/;
-		}
-		else
-		{
-			bound += BnB::rightway(originalMatrix);
-		}
-
-	}
-
-	int zerosPower(Matrix inpMatrix)
-	{
-		int max = 0;
-		//int maxi = 0;
-		//int maxj = 0;
-		for (int i = 0; i < inpMatrix.matrix.size(); i++)
-		{
-			for (int j = 0; j < inpMatrix.matrix.size(); j++)
+			int max = 0;
+			for (int i = 0; i < inpMatrix.matrix.size(); i++)
 			{
-				if (inpMatrix.matrix[i][j] == 0)
+				for (int j = 0; j < inpMatrix.matrix.size(); j++)
 				{
-					inpMatrix.matrix[i][j] = -1;
-					if (inpMatrix.minInRow(i) + inpMatrix.minInCol(j) > max)
+					if (inpMatrix.matrix[i][j] == 0)
 					{
-						max = inpMatrix.minInRow(i) + inpMatrix.minInCol(j);
-						maxi = i;
-						maxj = j;
+						inpMatrix.matrix[i][j] = -1;
+						if (inpMatrix.minInRow(i) + inpMatrix.minInCol(j) > max)
+						{
+							max = inpMatrix.minInRow(i) + inpMatrix.minInCol(j);
+							maxi = i;
+							maxj = j;
+						}
+						inpMatrix.matrix[i][j] = 0;
 					}
-					inpMatrix.matrix[i][j] = 0;
 				}
 			}
-		}
-		std::cout << " \n maxSum = " << max << " " << maxi << " row and " << maxj << " col\n";
-		return max;
+			std::cout << " \nmaxSum = " << max << ". Row number " << inpMatrix.vertHeading[maxi] << " & Col number " << inpMatrix.horzHeading[maxj] << "\n";
+			return max;
 
-		/*for (auto iter = matrix.begin(); iter != matrix.end(); iter++)
+		}
+
+		//void leftway(Matrix intoOriginalMatrix, int bound) похоже можно обойтись без явной функции левого ветвления
+		//{
+		//	//int supposedBound1 = 0;
+		//	
+		//	//zerosPower(matrix);
+
+		//	//return supposedBound1;
+		//}
+
+		int rightway(Matrix& intoOriginalMatrix)
 		{
-			for (auto it = iter->begin(); it != iter->end(); it++)
+			intoOriginalMatrix.deleteRow(maxi);
+			intoOriginalMatrix.deleteCol(maxj);
+			return intoOriginalMatrix.fsummaHorzMin() + intoOriginalMatrix.fsummaVertMin();
+		}
+
+		void step1(Matrix& originalMatrix)// передаём копию матрицы?
+		{
+			while (originalMatrix.matrix.size() != 0) // это неправильно, только для примера
 			{
-				if ()
+				originalMatrix.globalRowReduction();
+				originalMatrix.globalColReduction();
+				maxi = 0;
+				maxj = 0;
+				zerosPower(originalMatrix);
+				Matrix copyMatrix(originalMatrix);// копирую матрицу, чтобы при сравнении корневых границ (при использовании функции rightway) метод не менял матрицу
+				int timeBoundLeft = (originalMatrix.allbound + originalMatrix.minInRow(maxi) + originalMatrix.minInRow(maxj));
+
+				if (timeBoundLeft/*BnB::leftway(originalMatrix)*/ < BnB::rightway(copyMatrix))
+				{
+					originalMatrix.matrix[maxi][maxj] = -1;
+					std::cout << "После левого пути матрица равняется:\n";
+					originalMatrix.printM();
+					originalMatrix.allbound += timeBoundLeft;
+
+				}
+				else
+				{
+					//originalMatrix.matrix[maxj][maxi] = -1; // избавляемся от повтора (неправильный вариант) 
+
+					for (int i = 0; i < originalMatrix.matrix.size(); i++) // избавляемся от повтора
+					{
+						for (int j = 0; j < originalMatrix.matrix.size(); j++)
+						{
+							if ((originalMatrix.vertHeading[i] == originalMatrix.horzHeading[maxj]) && (originalMatrix.horzHeading[j] == originalMatrix.vertHeading[maxi]))
+							{
+								originalMatrix.matrix[i][j] = -1;
+							}
+						}
+					}
+						
+					if (!way.empty() && (*(way.end() - 1) == originalMatrix.vertHeading.at(maxi)))
+					{
+						way.push_back(originalMatrix.horzHeading.at(maxj));
+					}
+					if (way.size()>=2 && (originalMatrix.vertHeading.at(maxi)==originalMatrix.horzHeading.at(maxj)))
+					{ }
+					else
+					{
+						way.push_back(originalMatrix.vertHeading.at(maxi));
+						way.push_back(originalMatrix.horzHeading.at(maxj));
+					}
+
+					originalMatrix.allbound += BnB::rightway(originalMatrix); // сработал правый метод, удаляющий строки и столбцы
+					if (originalMatrix.matrix.size() != 0)
+					{
+						std::cout << "После правого пути матрица равняется:\n";
+						originalMatrix.printM();
+					}
+					else
+					{
+						std::cout << "Путь найден.\n";
+					}
+					
+					
+				}
 			}
 
-		}*/
+			std::cout << " Цепочка передвижения: " << std::endl;
+			for (std::vector<int>::iterator iter = way.begin(); iter != way.end(); iter++)
+			{
+				std::cout << *iter << "->" ;
+			}
+			std::cout << way[0] << std::endl;
 
-	}
+			std::cout << "Длина маршрута = " << originalMatrix.allbound << std::endl;
 
-	void leftway(Matrix intoOriginalMatrix, int bound)
-	{
-		//int supposedBound1 = 0;
-		
-		//zerosPower(matrix);
+		}
 
-		//return supposedBound1;
-	}
+		void excludeway(int to, int from, Matrix& originalMatrix)
+		{
+			originalMatrix.matrix[from][to] = -1;
+		}
 
-	int rightway(Matrix intoOriginalMatrix)
-	{
-		int supposedBound2 = 0;
-
-		intoOriginalMatrix.matrix[maxj][maxi];
-		intoOriginalMatrix.deleteRow(maxi);
-		intoOriginalMatrix.deleteCol(maxj);
-
-		supposedBound2 = intoOriginalMatrix.fsummaHorzMin() + intoOriginalMatrix.fsummaVertMin();
-
-
-		return supposedBound2;
-	}
-
+		void Addstep(int from, int to, Matrix& originalMatrix)
+		{
+			excludeway(from, to, originalMatrix);
+			if (*(way.end()-1)== from)
+			{
+				way.push_back(to);
+			}
+			else
+			{
+				way.push_back(from);
+				way.push_back(to);
+			}
+			
+		}
 }
-	void initializingBound(Matrix originalMatrix, int bound) // инициализируем корневую нижнюю границу
-	{
-		bound = originalMatrix.lowerBound();
-	}
-
 
 
 	
