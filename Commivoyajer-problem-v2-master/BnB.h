@@ -91,7 +91,7 @@ namespace BnB
 					{
 						way.push_back(originalMatrix.horzHeading.at(maxj));
 					}
-					if (way.size()>=2 && (originalMatrix.vertHeading.at(maxi)==originalMatrix.horzHeading.at(maxj)))
+					else if (way.size()>=2 && (originalMatrix.vertHeading.at(maxi)==originalMatrix.horzHeading.at(maxj)))
 					{ }
 					else
 					{
@@ -109,18 +109,22 @@ namespace BnB
 					{
 						std::cout << "Путь найден.\n";
 					}
-					
-					
 				}
 			}
 
 			std::cout << " Цепочка передвижения: " << std::endl;
 			for (std::vector<int>::iterator iter = way.begin(); iter != way.end(); iter++)
 			{
-				std::cout << *iter << "->" ;
+				if ((iter+1) != way.end())
+				{
+					std::cout << ((*iter) + 1) << "->";
+				}
+				else
+				{
+					std::cout << ((*iter) + 1) << std::endl;
+				}
 			}
-			std::cout << way[0] << std::endl;
-
+			//std::cout << way[0] << std::endl;
 			std::cout << "Длина маршрута = " << originalMatrix.allbound << std::endl;
 
 		}
