@@ -72,38 +72,38 @@ Matrix::Matrix(const Matrix& otherM)
 
 void Matrix::printM()
 {
-	std::cout << std::endl;
-	std::cout.setf(std::ios::left);
-	for (int k = 0; k < matrix.size(); k++)
-	{
-		std::cout << "==========";
-	}
-	std::cout << std::endl;
-	for (int k = 0; k < matrix.size(); k++)
-	{
-		std::cout << "\t   " << horzHeading[k];
-	}
-	std::cout << std::endl;
-	for (int k = 0; k < matrix.size(); k++)
-	{
-		std::cout << "==========";
-	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
+	//std::cout.setf(std::ios::left);
+	//for (int k = 0; k < matrix.size(); k++)
+	//{
+	//	std::cout << "==========";
+	//}
+	//std::cout << std::endl;
+	//for (int k = 0; k < matrix.size(); k++)
+	//{
+	//	std::cout << "\t   " << horzHeading[k];
+	//}
+	//std::cout << std::endl;
+	//for (int k = 0; k < matrix.size(); k++)
+	//{
+	//	std::cout << "==========";
+	//}
+	//std::cout << std::endl;
 
-	for (int i = 0; i < horzHeading.size(); i++)
-	{
-		std::cout << vertHeading[i];
-		std::cout.setf(std::ios::right);
-		std::cout << " ||";
-		for (int j = 0; j < vertHeading.size(); j++)
-		{
-			std::cout.setf(std::ios::right);
-			std::cout.width(8);
-			std::cout << matrix[i][j];
-		}
-		std::cout << std::endl;
-	}
-	std::cout.setf(std::ios::left);
+	//for (int i = 0; i < horzHeading.size(); i++)
+	//{
+	//	std::cout << vertHeading[i];
+	//	std::cout.setf(std::ios::right);
+	//	std::cout << " ||";
+	//	for (int j = 0; j < vertHeading.size(); j++)
+	//	{
+	//		std::cout.setf(std::ios::right);
+	//		std::cout.width(8);
+	//		std::cout << matrix[i][j];
+	//	}
+	//	std::cout << std::endl;
+	//}
+	//std::cout.setf(std::ios::left);
 }
 
 int Matrix::minInRow(const int& rowNum)
