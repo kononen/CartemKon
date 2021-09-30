@@ -104,6 +104,7 @@ void Matrix::printM()
 	//	std::cout << std::endl;
 	//}
 	//std::cout.setf(std::ios::left);
+	//std::cout << "На данный момент ДЛИНА всего пути = " << allbound << std::endl;
 }
 
 int Matrix::minInRow(const int& rowNum)

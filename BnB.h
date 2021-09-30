@@ -71,7 +71,16 @@ namespace BnB
 		{
 			intoOriginalMatrix.deleteRow(maxi);
 			intoOriginalMatrix.deleteCol(maxj);
-			return intoOriginalMatrix.fsummaHorzMin() + intoOriginalMatrix.fsummaVertMin();
+			std::cout << "На данный момент ДЛИНА всего пути = " << intoOriginalMatrix.allbound << std::endl;
+			intoOriginalMatrix.fsummaVertMin();
+			intoOriginalMatrix.globalRowReduction();
+
+			intoOriginalMatrix.fsummaHorzMin();
+			intoOriginalMatrix.globalColReduction();
+
+			intoOriginalMatrix.allbound += intoOriginalMatrix.lowerBound();
+			std::cout << "На данный момент ДЛИНА всего пути = " << intoOriginalMatrix.allbound << std::endl;
+			return intoOriginalMatrix.allbound/*intoOriginalMatrix.fsummaHorzMin() + intoOriginalMatrix.fsummaVertMin()*/; // Добавляем к ДЛИНЕ маршрута перед редукцией
 		}
 
 		void addPair(Matrix& intoOriginalMatrix, std::map<int, int>& intowayPair)
@@ -79,7 +88,10 @@ namespace BnB
 			//if (intoOriginalMatrix.matrix.size() != 2) // работает всё также
 			//{
 				intowayPair.emplace(intoOriginalMatrix.vertHeading.at(maxi), intoOriginalMatrix.horzHeading.at(maxj));
-				intoOriginalMatrix.allbound += BnB::rightway(intoOriginalMatrix); // сработал правый метод, удаляющий строки и столбцы
+				BnB::rightway(intoOriginalMatrix);
+				//intoOriginalMatrix.allbound += BnB::rightway(intoOriginalMatrix); // сработал правый метод, удаляющий строки и столбцы
+
+
 			//}
 			//else
 			//{
@@ -154,14 +166,16 @@ namespace BnB
 			originalMatrix.printM();
 
 			originalMatrix.allbound = originalMatrix.lowerBound();
-
 			std::map<int, int> wayPair;
 			std::list<std::pair<int, int>> filtrWayPair;// нужен для массива запоминаня
+			std::cout << "\n------------------------Начинаем шагать------------------------\n\n";
 			while (originalMatrix.matrix.size() != 0)
 			{
 				originalMatrix.globalRowReduction();
 				originalMatrix.globalColReduction();
+				std::cout << "После глобальной редукции матрица равняется:";
 				originalMatrix.printM();
+				std::cout << "На данный момент ДЛИНА всего пути = " << originalMatrix.allbound << std::endl;
 				maxi = 0;
 				maxj = 0;
 				zerosPower(originalMatrix);
@@ -173,6 +187,8 @@ namespace BnB
 					originalMatrix.matrix[maxi][maxj] = -1;
 					std::cout << "После левого пути матрица равняется:\n";
 					originalMatrix.allbound += timeBoundLeft;
+					originalMatrix.printM();
+					std::cout << "На данный момент ДЛИНА всего пути = " << originalMatrix.allbound << std::endl;
 				}
 				else // правый путь
 				{
@@ -260,15 +276,33 @@ namespace BnB
 								{
 									if ((originalMatrix.horzHeading[j] == originalMatrix.vertHeading[maxi]) && (originalMatrix.vertHeading[i] == it->second))
 									{
-										//if (saveway.size() == 0)
-										//{
 										originalMatrix.matrix[i][j] = -1;
-										//}
-										//	saveway.push_back(originalMatrix.horzHeading.at(maxj)); // зачем это?
+
+										// Объединить с двух сторон
+										for (auto it1 = filtrWayPair.begin(); it1 != filtrWayPair.end(); it1++) // для матрицы 2х2 и 1х1 уже можно элементы не удалять
+										{
+											if (originalMatrix.vertHeading.at(maxi) == it1->second)
+											{
+												it1->second = originalMatrix.horzHeading.at(maxj);
+												for (int i1 = 0; i1 < originalMatrix.matrix.size(); i1++) // избавляемся от повтора
+												{
+													for (int j1 = 0; j1 < originalMatrix.matrix.size(); j1++)
+													{
+														if ((originalMatrix.horzHeading[j1] == it1->first) && (originalMatrix.vertHeading[i1] == originalMatrix.horzHeading[maxj]))
+														{
+															
+															originalMatrix.matrix[i1][j1] = -1;
+															goto joinFromTo; // Только что объединили, поэтому можно выходить из цикла
+														}
+													}
+												}
+											}
+										}
 									}
 								}
 							}
 						}
+
 						if (originalMatrix.vertHeading.at(maxi) == it->second)
 						{
 							it->second = originalMatrix.horzHeading.at(maxj);
@@ -278,16 +312,35 @@ namespace BnB
 								{
 									if ((originalMatrix.horzHeading[j] == it->first) && (originalMatrix.vertHeading[i] == originalMatrix.horzHeading[maxj]))
 									{
-										//if (saveway.size() == 0)
-										//{
-											originalMatrix.matrix[i][j] = -1;
-										//}
-									//	saveway.push_back(originalMatrix.horzHeading.at(maxj)); // зачем это?
+										
+										originalMatrix.matrix[i][j] = -1;
+										
+										for (auto it2 = filtrWayPair.begin(); it2 != filtrWayPair.end(); it2++) // для матрицы 2х2 и 1х1 уже можно элементы не удалять
+										{	// Объединить с двух сторон
+											if (originalMatrix.horzHeading.at(maxj) == it2->first)
+											{
+												it2->first = originalMatrix.vertHeading.at(maxi);
+												for (int i2 = 0; i2 < originalMatrix.matrix.size(); i2++) // избавляемся от повтора
+												{
+													for (int j2 = 0; j < originalMatrix.matrix.size(); j2++)
+													{
+														if ((originalMatrix.horzHeading[j2] == originalMatrix.vertHeading[maxi]) && (originalMatrix.vertHeading[i2] == it2->second))
+														{
+															originalMatrix.matrix[i2][j2] = -1;
+															goto joinFromTo; // Только что объединили, поэтому можно выходить из цикла
+														}
+													}
+												}
+											}
+										}
 									}
 								}
 							}
 						}
 					}
+
+
+					joinFromTo:
 					std::cout << "Befor delete" << std::endl;
 					originalMatrix.printM();
 					BnB::addPair(originalMatrix, wayPair); // включили ячейку в маршрут (пока не склеенный). 
@@ -350,6 +403,7 @@ namespace BnB
 					if (originalMatrix.matrix.size() != 0)
 					{
 						std::cout << "После правого пути матрица равняется:\n";
+						originalMatrix.printM();
 					}
 					else
 					{
