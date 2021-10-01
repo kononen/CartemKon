@@ -66,31 +66,31 @@ int main()
 
 	
 
-	std::ifstream f;
+	//std::ifstream f;
 
 	//+
 	//f.open("coord.txt");
 	//f.open("coordfirst.txt");
 	//f.open("m5_trouble.txt");
 	//f.open("m5.txt");
-	f.open("m5_symmetry.txt");
+	//f.open("m5_symmetry.txt");
 
-	int n;// = 5;
-	f >> n;
+	//int n;// = 5;
+	//f >> n;
 
-	Matrix firstMatrix(0, 50, n);
+	//Matrix firstMatrix(0, 50, n);
 
-	for (int i = 0; i < n; i++) // для матрицы без главной диагонали (с -1)
-	{
-		for (int j = 0; j < n; j++)
-		{
-			if (i != j)
-			{
-				f >> firstMatrix.matrix[i][j];
-			}//чтение из файла
-			else { firstMatrix.matrix[i][j] = -1; }
-		}
-	}
+	//for (int i = 0; i < n; i++) // для матрицы без главной диагонали (с -1)
+	//{
+	//	for (int j = 0; j < n; j++)
+	//	{
+	//		if (i != j)
+	//		{
+	//			f >> firstMatrix.matrix[i][j];
+	//		}//чтение из файла
+	//		else { firstMatrix.matrix[i][j] = -1; }
+	//	}
+	//}
 
 	/////*for (int i = 0; i < n; i++)
 	////{
@@ -100,9 +100,9 @@ int main()
 	////	}
 	////}*/
 
-	f.close();
+	//f.close();
 
-	//Matrix firstMatrix(0, 50, 5);
+	Matrix firstMatrix(0, 5000, 500);
 	firstMatrix.printM();
 
 	auto clockS = clock();
