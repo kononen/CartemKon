@@ -282,7 +282,7 @@ namespace BnB // вычисл€ет нужный маршрут
 	{
 		if (originalMatrix.matrix.size() != 0)
 		{
-			std::cout << "ѕосле правого пути матрица равн€етс€:\n";
+			//std::cout << "ѕосле правого пути матрица равн€етс€:\n";
 			originalMatrix.printM();
 		}
 		else
@@ -341,7 +341,7 @@ namespace BnB // вычисл€ет нужный маршрут
 	}
 
 		// сравнивает “екущий шаг со всеми другими —амыми лучшими (самой короткой длиной маршрута и с самым большим количеством городов в цепи)
-	void AnalizNextStep(FrizeStep& ourStep) 
+	std::list<FrizeStep>::iterator AnalizNextStep(std::list<FrizeStep>::iterator ourStep)
 	{
 		int minwaylength = alternatives.begin()->matrixStepCity.allbound; // инициализируем переменную минимального пути
 		int maxchain = -1; // инициализируем переменную максимальной цепи (количества) городов дл€ минимального пути
@@ -357,7 +357,7 @@ namespace BnB // вычисл€ет нужный маршрут
 
 		for (auto it = alternatives.begin(); it != alternatives.end(); it++) // цикл нахождени€ максимальной цепочки пути среди цепочек с минимальной длиной 			{
 		{
-			if ((it->matrixStepCity.allbound == minwaylength) && (it->stepWayPair.size() > maxchain))
+			if ((it->matrixStepCity.allbound == minwaylength) && (((int)it->stepWayPair.size()) > maxchain))
 			{
 				maxchain = it->stepWayPair.size();
 			}
@@ -370,11 +370,11 @@ namespace BnB // вычисл€ет нужный маршрут
 				it->active = false;
 				itNextStep = it; 
 				itNextStep->active = true;
-				ourStep.SwapActive(*itNextStep); // “еперь это активный путь
-				break; // по идее нам не важно, кака€ из цепочек с адинаковой длиной и равным числом городов будет выбрана дл€ продолжени€
+				ourStep->SwapActive(*itNextStep); // “еперь это активный путь
+				return it; // по идее нам не важно, кака€ из цепочек с адинаковой длиной и равным числом городов будет выбрана дл€ продолжени€
 			}
 		}
-
+		return ourStep;
 	}
 
 	void AddNextCityLeft(FrizeStep leftFrizeNotActive) //  ќѕ»–”≈ћ дл€ создани€ нового элемента массива FrizeStep (неактивного)
@@ -423,7 +423,7 @@ namespace BnB // вычисл€ет нужный маршрут
 					RightOrEnd(itAlt->matrixStepCity); // при нулевой матрице выводим, что путь найден, иначе показываем чему равна матрица после правого пути
 				}
 				
-				AnalizNextStep(*itAlt);
+				itAlt = AnalizNextStep(itAlt);
 			}
 			
 			//"склеиваем пары путей" 

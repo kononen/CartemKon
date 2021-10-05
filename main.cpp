@@ -43,14 +43,14 @@ int main()
 	*/
 
 	// - матрица 6х6 F=13 вместо F=12
-	Matrix firstMatrix(0, 50, 6);
+	/*Matrix firstMatrix(0, 50, 6);
 	firstMatrix.matrix[0][0] = -1;	 firstMatrix.matrix[0][1] = 4;		firstMatrix.matrix[0][2] = 4;	firstMatrix.matrix[0][3] = 5;	 firstMatrix.matrix[0][4] = 4;		 firstMatrix.matrix[0][5] = 3;
 	firstMatrix.matrix[1][0] = 2;	 firstMatrix.matrix[1][1] = -1;		firstMatrix.matrix[1][2] = 7;	firstMatrix.matrix[1][3] = 1;	 firstMatrix.matrix[1][4] = 1;		 firstMatrix.matrix[1][5] = 6;
 	firstMatrix.matrix[2][0] = 2;	 firstMatrix.matrix[2][1] = 3;		firstMatrix.matrix[2][2] = -1;	firstMatrix.matrix[2][3] = 9;	 firstMatrix.matrix[2][4] = 4;		 firstMatrix.matrix[2][5] = 5;
 	firstMatrix.matrix[3][0] = 1;	 firstMatrix.matrix[3][1] = 3;		firstMatrix.matrix[3][2] = 2;	firstMatrix.matrix[3][3] = -1;	 firstMatrix.matrix[3][4] = 3;		 firstMatrix.matrix[3][5] = 1;
 	firstMatrix.matrix[4][0] = 7;	 firstMatrix.matrix[4][1] = 4;		firstMatrix.matrix[4][2] = 1;	firstMatrix.matrix[4][3] = 1;	 firstMatrix.matrix[4][4] = -1;		 firstMatrix.matrix[4][5] = 4;
 	firstMatrix.matrix[5][0] = 2;	 firstMatrix.matrix[5][1] = 3;		firstMatrix.matrix[5][2] = 4;	firstMatrix.matrix[5][3] = 7;	 firstMatrix.matrix[5][4] = 9;		 firstMatrix.matrix[5][5] = -1;
-	
+	*/
 
 	//+ матрица 5х5   F=180
 	/*Matrix firstMatrix(0, 50, 5);
@@ -100,7 +100,7 @@ int main()
 
 	//f.close();
 
-	//Matrix firstMatrix(0, 20, 100);
+	Matrix firstMatrix(0, 100, 50);
 	firstMatrix.printM();
 
 	auto clockS = clock();
