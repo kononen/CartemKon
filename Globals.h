@@ -6,8 +6,8 @@
 namespace Globals
 {
 	const int defaultGenerationMin = 0;
-	const int defaultGenerationMax = 10;
-	const int defaultSize = 5;
+	const int defaultGenerationMax = 0;
+	const int defaultSize = 0;
 
 	extern bool runInnitialized;
 

@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Event.cpp" />
+    <ClCompile Include="FrizeStep.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="BnB.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="FrizeStep.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Menu.h" />

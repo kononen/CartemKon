@@ -14,11 +14,11 @@ int main()
 	//App mainCycle = App();
 	
 	//+ 91
-	/*Matrix firstMatrix(0, 50, 4);
+	Matrix firstMatrix(0, 50, 4);
 	firstMatrix.matrix[0][0] = -1; firstMatrix.matrix[0][1] = 20; firstMatrix.matrix[0][2] = 16; firstMatrix.matrix[0][3] = 39;
 	firstMatrix.matrix[1][0] = 48; firstMatrix.matrix[1][1] = -1; firstMatrix.matrix[1][2] = 24; firstMatrix.matrix[1][3] = 48; 
 	firstMatrix.matrix[2][0] = 36; firstMatrix.matrix[2][1] = 41; firstMatrix.matrix[2][2] = -1; firstMatrix.matrix[2][3] = 24; 
-	firstMatrix.matrix[3][0] = 34; firstMatrix.matrix[3][1] = 3;  firstMatrix.matrix[3][2] = 32; firstMatrix.matrix[3][3] = -1;*/
+	firstMatrix.matrix[3][0] = 34; firstMatrix.matrix[3][1] = 3;  firstMatrix.matrix[3][2] = 32; firstMatrix.matrix[3][3] = -1;
 	
 
 	//---Ã¿“–»÷¿ 6’6 —œ≈÷»‘»◊≈— »…! F=38 ¬ÏÂÒÚÓ F=34()
@@ -102,7 +102,7 @@ int main()
 
 	//f.close();
 
-	Matrix firstMatrix(0, 5000, 500);
+	//Matrix firstMatrix(0, 20, 100);
 	firstMatrix.printM();
 
 	auto clockS = clock();

@@ -17,6 +17,8 @@ class Matrix
 
 		Matrix(const Matrix& otherM);// конструктор копирования
 
+		void operator=(const Matrix& otherM); // оператор равенства
+
 		//void equalityFirstData(); // в baseDataMatrix присваиваем значение matrix з
 
 		void printM(); // выводим матрицу

@@ -30,6 +30,9 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FrizeStep.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Matrix.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BnB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FrizeStep.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
