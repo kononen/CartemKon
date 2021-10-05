@@ -3,6 +3,7 @@
 #include <iostream>
 #include <map>
 #include <list>
+#include <iterator>
 #include "Matrix.h"
 #include "FrizeStep.h"
 
@@ -342,21 +343,21 @@ namespace BnB // вычисляет нужный маршрут
 		// сравнивает Текущий шаг со всеми другими Самыми лучшими (самой короткой длиной маршрута и с самым большим количеством городов в цепи)
 	void AnalizNextStep(FrizeStep& ourStep) 
 	{
-		int minwaylength = alternatives.begin()->waylenght; // инициализируем переменную минимального пути
+		int minwaylength = alternatives.begin()->matrixStepCity.allbound; // инициализируем переменную минимального пути
 		int maxchain = -1; // инициализируем переменную максимальной цепи (количества) городов для минимального пути
-		auto nextStep = alternatives.begin(); // указатель на следующий маршрут
+		auto itNextStep = alternatives.begin(); // указатель на следующий маршрут
 
 		for (auto it = alternatives.begin(); it != alternatives.end(); it++) // цикл нахождения минимальной длины города 
 		{
-			if (it->waylenght < minwaylength)
+			if (it->matrixStepCity.allbound < minwaylength)
 			{
-					minwaylength = it->waylenght;
+					minwaylength = it->matrixStepCity.allbound;
 			}
 		}
 
 		for (auto it = alternatives.begin(); it != alternatives.end(); it++) // цикл нахождения максимальной цепочки пути среди цепочек с минимальной длиной 			{
 		{
-			if ((it->waylenght == minwaylength) && (it->stepWayPair.size() > maxchain))
+			if ((it->matrixStepCity.allbound == minwaylength) && (it->stepWayPair.size() > maxchain))
 			{
 				maxchain = it->stepWayPair.size();
 			}
@@ -364,59 +365,70 @@ namespace BnB // вычисляет нужный маршрут
 
 		for (auto it = alternatives.begin(); it != alternatives.end(); it++) // цикл нахождения лучшего города (с минимальной длиной и для неё максимальной цепью)
 		{
-			if ((ourStep.waylenght == it->waylenght) && (maxchain == it->stepWayPair.size()))
+			if ((/*ourStep.matrixStepCity.allbound*/minwaylength == it->matrixStepCity.allbound) && (maxchain == it->stepWayPair.size()))
 			{
-				nextStep = it; 
-				ourStep.SwapActive(*nextStep); // Теперь это активный путь
+				it->active = false;
+				itNextStep = it; 
+				itNextStep->active = true;
+				ourStep.SwapActive(*itNextStep); // Теперь это активный путь
 				break; // по идее нам не важно, какая из цепочек с адинаковой длиной и равным числом городов будет выбрана для продолжения
 			}
 		}
 
 	}
 
-	void AddNextCityLeft()
+	void AddNextCityLeft(FrizeStep leftFrizeNotActive) // КОПИРУЕМ для создания нового элемента массива FrizeStep (неактивного)
 	{
-
+		leftFrizeNotActive.active = false; 
+		leftway(leftFrizeNotActive.matrixStepCity);
+		alternatives.push_back(leftFrizeNotActive);
 	}
 
 	void AddNextCityRight(FrizeStep rightFrizeNotActive) // КОПИРУЕМ для создания нового элемента массива FrizeStep (неактивного)
 	{
-		
+		rightFrizeNotActive.active = false;
+		realRightWay(rightFrizeNotActive.matrixStepCity, rightFrizeNotActive.stepWayPair, rightFrizeNotActive.stepfiltrWayPair);
+		alternatives.push_back(rightFrizeNotActive);
 	}
 
 		void step1(Matrix& originalMatrix)// передаём копию матрицы?
 		{
 			firstRedaction(originalMatrix);
-			FrizeStep firstFrize; 
-			firstFrize.matrixStepCity = originalMatrix; firstFrize.active = true;
-			std::map<int, int> wayPair;
-			std::list<std::pair<int, int>> filtrWayPair;// нужен для массива запоминаня
+			FrizeStep stepAorF;
+			stepAorF.matrixStepCity = originalMatrix; stepAorF.active = true;
+			alternatives.push_back(stepAorF);
+			std::list<FrizeStep>::iterator itAlt = alternatives.begin(); // итератор на активный путь
+			//std::map<int, int> wayPair;
+			//std::list<std::pair<int, int>> filtrWayPair;// нужен для массива запоминаня
 			std::cout << "\n------------------------Начинаем шагать------------------------\n\n";
 
-			while (originalMatrix.matrix.size() != 0)
+			while (itAlt->matrixStepCity.matrix.size() != 0)
 			{
 				maxi = 0;
 				maxj = 0;
-				zerosPower(originalMatrix);
-				Matrix copyMatrix1(originalMatrix); // копирую матрицу, чтобы при сравнении корневых границ (при использовании функции leftway)  метод не менял матрицу
-				Matrix copyMatrix2(originalMatrix); // копирую матрицу, чтобы при сравнении корневых границ (при использовании функции rightway) метод не менял матрицу
+				zerosPower(itAlt->matrixStepCity);
+				Matrix copyMatrix1(itAlt->matrixStepCity); // копирую матрицу, чтобы при сравнении корневых границ (при использовании функции leftway)  метод не менял матрицу
+				Matrix copyMatrix2(itAlt->matrixStepCity); // копирую матрицу, чтобы при сравнении корневых границ (при использовании функции rightway) метод не менял матрицу
 
 				if (leftway(copyMatrix1) < BnB::rightway(copyMatrix2)) // левый путь
 				{
-					AddNextCityRight(firstFrize);
-					leftway(originalMatrix);
+					AddNextCityRight(*itAlt);
+					leftway(itAlt->matrixStepCity);
 				}
 				else // правый путь
 				{
-					realRightWay(originalMatrix, wayPair, filtrWayPair);
+					AddNextCityLeft(*itAlt);
+					realRightWay(itAlt->matrixStepCity, itAlt->stepWayPair, itAlt->stepfiltrWayPair);				
 
-					RightOrEnd(originalMatrix); // при нулевой матрице выводим, что путь найден, иначе показываем чему равна матрица после правого пути
+					RightOrEnd(itAlt->matrixStepCity); // при нулевой матрице выводим, что путь найден, иначе показываем чему равна матрица после правого пути
 				}
+				
+				AnalizNextStep(*itAlt);
 			}
-
+			
 			//"склеиваем пары путей" 
-			joinPairIntoLastWay(wayPair);
-			wayAndLong(originalMatrix); // Путь и его длина 
+			joinPairIntoLastWay(itAlt->stepWayPair);
+			wayAndLong(itAlt->matrixStepCity); // Путь и его длина 
 		}
 
 		/*

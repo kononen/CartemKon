@@ -39,6 +39,7 @@ Matrix::Matrix(int min, int max, int dim) // конструктор инициализации
 Matrix::Matrix(const Matrix& otherM) // конструктор копирования
 {
 	std::vector<int> matrixRow;
+	this->allbound = otherM.allbound;
 	for (int i = 0; i < otherM.matrix.size(); i++)
 	{
 		this->horzHeading.push_back(otherM.horzHeading[i]);

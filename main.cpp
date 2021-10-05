@@ -14,12 +14,12 @@ int main()
 	//App mainCycle = App();
 	
 	//+ 91
-	Matrix firstMatrix(0, 50, 4);
+	/*Matrix firstMatrix(0, 50, 4);
 	firstMatrix.matrix[0][0] = -1; firstMatrix.matrix[0][1] = 20; firstMatrix.matrix[0][2] = 16; firstMatrix.matrix[0][3] = 39;
 	firstMatrix.matrix[1][0] = 48; firstMatrix.matrix[1][1] = -1; firstMatrix.matrix[1][2] = 24; firstMatrix.matrix[1][3] = 48; 
 	firstMatrix.matrix[2][0] = 36; firstMatrix.matrix[2][1] = 41; firstMatrix.matrix[2][2] = -1; firstMatrix.matrix[2][3] = 24; 
 	firstMatrix.matrix[3][0] = 34; firstMatrix.matrix[3][1] = 3;  firstMatrix.matrix[3][2] = 32; firstMatrix.matrix[3][3] = -1;
-	
+	*/
 
 	//---ְּׂ׀ָײְ 6ױ6 ֵֿׁײָװָ׳ֵׁÊָֹ! F=38 ֲלוסעמ F=34()
 	
@@ -43,14 +43,14 @@ int main()
 	*/
 
 	// - לאענטצא 6ץ6 F=13 גלוסעמ F=12
-	/*Matrix firstMatrix(0, 50, 6);
+	Matrix firstMatrix(0, 50, 6);
 	firstMatrix.matrix[0][0] = -1;	 firstMatrix.matrix[0][1] = 4;		firstMatrix.matrix[0][2] = 4;	firstMatrix.matrix[0][3] = 5;	 firstMatrix.matrix[0][4] = 4;		 firstMatrix.matrix[0][5] = 3;
 	firstMatrix.matrix[1][0] = 2;	 firstMatrix.matrix[1][1] = -1;		firstMatrix.matrix[1][2] = 7;	firstMatrix.matrix[1][3] = 1;	 firstMatrix.matrix[1][4] = 1;		 firstMatrix.matrix[1][5] = 6;
 	firstMatrix.matrix[2][0] = 2;	 firstMatrix.matrix[2][1] = 3;		firstMatrix.matrix[2][2] = -1;	firstMatrix.matrix[2][3] = 9;	 firstMatrix.matrix[2][4] = 4;		 firstMatrix.matrix[2][5] = 5;
 	firstMatrix.matrix[3][0] = 1;	 firstMatrix.matrix[3][1] = 3;		firstMatrix.matrix[3][2] = 2;	firstMatrix.matrix[3][3] = -1;	 firstMatrix.matrix[3][4] = 3;		 firstMatrix.matrix[3][5] = 1;
 	firstMatrix.matrix[4][0] = 7;	 firstMatrix.matrix[4][1] = 4;		firstMatrix.matrix[4][2] = 1;	firstMatrix.matrix[4][3] = 1;	 firstMatrix.matrix[4][4] = -1;		 firstMatrix.matrix[4][5] = 4;
 	firstMatrix.matrix[5][0] = 2;	 firstMatrix.matrix[5][1] = 3;		firstMatrix.matrix[5][2] = 4;	firstMatrix.matrix[5][3] = 7;	 firstMatrix.matrix[5][4] = 9;		 firstMatrix.matrix[5][5] = -1;
-	*/
+	
 
 	//+ לאענטצא 5ץ5   F=180
 	/*Matrix firstMatrix(0, 50, 5);
@@ -64,9 +64,15 @@ int main()
 
 
 
-	
+	/////*for (int i = 0; i < n; i++)
+	////{
+	////	for (int j = 0; j < n; j++)
+	////	{
+	////		f >> firstMatrix.matrix[i][j];
+	////	}
+	////}*/
 
-	//std::ifstream f;
+	std::ifstream f;
 
 	//+
 	//f.open("coord.txt");
@@ -91,14 +97,6 @@ int main()
 	//		else { firstMatrix.matrix[i][j] = -1; }
 	//	}
 	//}
-
-	/////*for (int i = 0; i < n; i++)
-	////{
-	////	for (int j = 0; j < n; j++)
-	////	{
-	////		f >> firstMatrix.matrix[i][j];
-	////	}
-	////}*/
 
 	//f.close();
 
